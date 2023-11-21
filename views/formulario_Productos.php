@@ -59,16 +59,35 @@ require '../util/base_de_datos.php'
         $temp_Descripcion = depurar($_POST["descripcion_Producto"]);
         $temp_Cantidad = depurar($_POST["cantidad_Producto"]);
 
-        //$_FILES["nombreCampo"]["queQueremosCoger"] -> TYPE, NAME, SIZE, TMP_NAME
+        # Validación de la imagen
+    if ($_FILES["imagen"]["error"] == UPLOAD_ERR_OK) {
+        $allowed_types = array('image/jpeg', 'image/jpg', 'image/png');
+        $max_size = 1024 * 1024; // 1MB
+
         $nombre_imagen = $_FILES["imagen"]["name"];
         $tipo_imagen = $_FILES["imagen"]["type"];
         $tamano_imagen = $_FILES["imagen"]["size"];
         $ruta_temporal = $_FILES["imagen"]["tmp_name"];
-        //echo $nombre_imagen . " " . $tipo_imagen . " " . $tamano_imagen . " " . $ruta_temporal;
-    
         $ruta_final = "./images/" . $nombre_imagen;
 
-        move_uploaded_file($ruta_temporal, $ruta_final);
+        $err_imagen = '';
+
+        if (!in_array($tipo_imagen, $allowed_types)) {
+            $err_imagen = "Solo se permiten archivos JPG, JPEG o PNG.";
+        } elseif ($tamano_imagen > $max_size) {
+            $err_imagen = "La imagen es demasiado grande. El tamaño máximo permitido es 1MB.";
+        } else {
+            // Si la imagen cumple con los requisitos, mueve el archivo al directorio final
+            move_uploaded_file($ruta_temporal, $ruta_final);
+        }
+
+        if ($err_imagen !== '') {
+            // Si hay errores en la imagen, asigna el mensaje a $err_nombre_Producto (o a la variable que desees)
+            $err_nombre_Producto = $err_imagen;
+        }
+    } else {
+        $err_imagen =  "La imagen no se ha podido subir.";
+    }
 
         # Validación de Producto.
         if (strlen($temp_nombre_Producto) == 0) {
@@ -153,6 +172,8 @@ require '../util/base_de_datos.php'
                             <div class="mb-3">
                                 <label class="form-label">Imagen</label>
                                 <input class="form-control" type="file" name="imagen">
+                                <?php if (isset($err_imagen))
+                                    echo $err_imagen; ?>
                             </div>
                             <button type="submit" class="btn btn-primary">Guardar</button>
                         </form>

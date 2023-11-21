@@ -75,7 +75,7 @@
                 $contrasena = $temp_contrasena;
                 // Para cifrar una contraseña
                 $contrasena_cifrada = password_hash($contrasena, PASSWORD_DEFAULT);
-                echo $contrasena_cifrada; // Esto es para demostración, deberás almacenar $contrasena_cifrada en la base de datos
+                //echo $contrasena_cifrada; // Esto es para demostración, deberás almacenar $contrasena_cifrada en la base de datos
             }
         }
 
