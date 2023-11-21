@@ -1,0 +1,21 @@
+
+table {
+    text-align: center;
+}
+table th {
+    font-size: 25px;
+}
+
+table td {
+    font-size: 20px;
+}
+img {
+    max-width: 150px;
+    max-height: 150px;
+}
+.container {
+    text-align: center;
+}
+#registro {
+    background-image: url(../images/fondo_registro.jpeg);
+}
